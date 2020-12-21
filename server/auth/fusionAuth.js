@@ -84,6 +84,7 @@ router.get("fusionauth.callback", auth({ required: false }), async (ctx) => {
         email: userData.email,
         isAdmin: isFirstUser,
         avatarUrl: userData.imageUrl,
+        language: "pt_BR",
       },
     });
 
