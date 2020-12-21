@@ -9,6 +9,7 @@ import validation from "../middlewares/validation";
 import { Team } from "../models";
 
 import email from "./email";
+import fusionAuth from "./fusionAuth";
 import google from "./google";
 import slack from "./slack";
 
@@ -18,6 +19,7 @@ const router = new Router();
 router.use("/", slack.routes());
 router.use("/", google.routes());
 router.use("/", email.routes());
+router.use("/", fusionAuth.routes());
 
 router.get("/redirect", auth(), async (ctx) => {
   const user = ctx.state.user;

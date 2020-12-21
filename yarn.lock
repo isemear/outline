@@ -1055,6 +1055,13 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@fusionauth/typescript-client@^1.22.2":
+  version "1.22.2"
+  resolved "https://registry.yarnpkg.com/@fusionauth/typescript-client/-/typescript-client-1.22.2.tgz#ebb41f2532a7cc02b7451db04ed2a3dce35d9b85"
+  integrity sha512-0D0ZDD1pQNjbqgwKPrPUx4mnUqULiZt0QueqgFXYS/uAPSPbCPW4g1eYggNGDFYwdMmxbAeZ48uosVZKyRB65A==
+  dependencies:
+    node-fetch "^2.6.1"
+
 "@icons/material@^0.2.4":
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/@icons/material/-/material-0.2.4.tgz#e90c9f71768b3736e76d7dd6783fc6c2afa88bc8"

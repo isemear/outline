@@ -38,6 +38,7 @@ export const languageOptions = [
   { label: "Français (France)", value: "fr_FR" },
   { label: "한국어 (Korean)", value: "ko_KR" },
   { label: "Português (Portugal)", value: "pt_PT" },
+  { label: "Português (Brasil)", value: "pt_BR" },
 ];
 
 export const languages: string[] = languageOptions.map((i) => i.value);

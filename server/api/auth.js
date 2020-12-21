@@ -12,19 +12,27 @@ const router = new Router();
 
 let services = [];
 
-if (process.env.GOOGLE_CLIENT_ID) {
-  services.push({
-    id: "google",
-    name: "Google",
-    authUrl: signin("google"),
-  });
-}
+// if (process.env.GOOGLE_CLIENT_ID) {
+//   services.push({
+//     id: "google",
+//     name: "Google",
+//     authUrl: signin("google"),
+//   });
+// }
 
-if (process.env.SLACK_KEY) {
+// if (process.env.SLACK_KEY) {
+//   services.push({
+//     id: "slack",
+//     name: "Slack",
+//     authUrl: signin("slack"),
+//   });
+// }
+
+if (process.env.FUSION_AUTH_CLIENT_ID) {
   services.push({
-    id: "slack",
-    name: "Slack",
-    authUrl: signin("slack"),
+    id: "fusionauth",
+    name: process.env.FUSION_AUTH_TEAM,
+    authUrl: signin("fusionauth"),
   });
 }
 
