@@ -54,6 +54,6 @@ export function retrieveUser(userId: string) {
 
 export function registerUser(userId: string) {
   return client.register(userId, {
-    registration: { applicationId },
+    registration: { applicationId, verified: true },
   });
 }

@@ -137,7 +137,11 @@ router.post("fusionauth.hooks", async (ctx) => {
   const event = ctx.body["event"];
   if (secret === FusionAuth.hookSecret) {
     if ("type" in event && event.type === "user.create") {
-      await FusionAuth.registerUser(event.user.id);
+      try {
+        await FusionAuth.registerUser(event.user.id);
+      } catch (e) {
+        console.error(e);
+      }
     } else if ("type" in event && event.type === "user.delete") {
       const users = await User.findAll({
         where: {
@@ -155,7 +159,9 @@ router.post("fusionauth.hooks", async (ctx) => {
             data: { name: user.name },
             ip: ctx.request.ip,
           });
-        } catch (e) {}
+        } catch (e) {
+          console.error(e);
+        }
       });
     }
   }
