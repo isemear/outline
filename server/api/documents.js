@@ -1101,6 +1101,49 @@ router.post("documents.delete", auth(), async (ctx) => {
   };
 });
 
+router.post("documents.permanentlyDelete", auth(), async (ctx) => {
+  const { id } = ctx.body;
+  ctx.assertPresent(id, "id is required");
+
+  const user = ctx.state.user;
+  const document = await Document.findByPk(id, {
+    userId: user.id,
+    paranoid: false,
+  });
+  if (!document) {
+    throw new NotFoundError();
+  }
+  authorize(user, "restore", document);
+
+  if (!document.deletedAt) {
+    throw new InvalidRequestError(
+      "Document must be deleted before it can be permanently deleted"
+    );
+  }
+
+  const documentId = document.id;
+  const collectionId = document.collectionId;
+  const teamId = document.teamId;
+  const title = document.title;
+
+  console.log("DELETING");
+  await document.permanentlyDelete();
+
+  await Event.create({
+    name: "documents.permanentlyDelete",
+    documentId,
+    collectionId,
+    teamId,
+    actorId: user.id,
+    data: { title },
+    ip: ctx.request.ip,
+  });
+
+  ctx.body = {
+    success: true,
+  };
+});
+
 router.post("documents.unpublish", auth(), async (ctx) => {
   const { id } = ctx.body;
   ctx.assertPresent(id, "id is required");

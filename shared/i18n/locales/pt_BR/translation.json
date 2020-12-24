@@ -295,5 +295,8 @@
   "Edit Profile": "Editar Perfil",
   "{{ userName }} hasn’t updated any documents yet.": "{{ userName }} ainda não atualizou nenhum documento.",
   "Collapse": "Colapsar",
-  "Expand": "Expandir"
+  "Expand": "Expandir",
+  "Document permanently deleted": "Documento excluído permanentemente",
+  "Delete permanently": "Apagar permanentemente",
+  "Delete {{ documentName }} permanently": "Apagar {{ documentName }} permanentemente"
 }

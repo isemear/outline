@@ -10,7 +10,9 @@ import parseTitle from "../../shared/utils/parseTitle";
 import unescape from "../../shared/utils/unescape";
 import { Collection, User } from "../models";
 import { DataTypes, sequelize } from "../sequelize";
+import parseAttachmentIds from "../utils/parseAttachmentIds";
 import slugify from "../utils/slugify";
+import Attachment from "./Attachment";
 import Revision from "./Revision";
 
 const Op = Sequelize.Op;
@@ -666,6 +668,50 @@ Document.prototype.delete = function (userId: string) {
       return this;
     }
   );
+};
+
+Document.prototype.permanentlyDelete = async function () {
+  const query = `
+  SELECT COUNT(id)
+  FROM documents
+  WHERE "searchVector" @@ to_tsquery('english', :query) AND
+  "teamId" = :teamId AND
+  "id" != :documentId
+`;
+
+  console.log("getting attachments");
+  const attachmentIds = parseAttachmentIds(this.text);
+  for (const attachmentId of attachmentIds) {
+    console.log("removing attachment");
+    const [{ count }] = await sequelize.query(query, {
+      type: sequelize.QueryTypes.SELECT,
+      replacements: {
+        documentId: this.id,
+        teamId: this.teamId,
+        query: attachmentId,
+      },
+    });
+
+    if (parseInt(count) === 0) {
+      const attachment = await Attachment.findOne({
+        where: {
+          teamId: this.teamId,
+          id: attachmentId,
+        },
+      });
+
+      if (attachment) {
+        await attachment.destroy();
+      }
+    }
+  }
+  console.log("destroying", this.destroy);
+  await Document.destroy({
+    where: {
+      id: this.id,
+    },
+    force: true,
+  });
 };
 
 Document.prototype.getTimestamp = function () {

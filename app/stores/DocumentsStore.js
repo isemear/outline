@@ -584,6 +584,14 @@ export default class DocumentsStore extends BaseStore<Document> {
   }
 
   @action
+  permanentlyDelete = async (document: Document) => {
+    await client.post("/documents.permanentlyDelete", {
+      id: document.id,
+    });
+    await this.remove(document.id);
+  };
+
+  @action
   archive = async (document: Document) => {
     const res = await client.post("/documents.archive", {
       id: document.id,

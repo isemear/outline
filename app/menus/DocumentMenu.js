@@ -10,6 +10,7 @@ import PoliciesStore from "stores/PoliciesStore";
 import UiStore from "stores/UiStore";
 import Document from "models/Document";
 import DocumentDelete from "scenes/DocumentDelete";
+import DocumentDeletePermanently from "scenes/DocumentDeletePermanently";
 import DocumentShare from "scenes/DocumentShare";
 import DocumentTemplatize from "scenes/DocumentTemplatize";
 import CollectionIcon from "components/CollectionIcon";
@@ -46,6 +47,7 @@ type Props = {
 class DocumentMenu extends React.Component<Props> {
   @observable redirectTo: ?string;
   @observable showDeleteModal = false;
+  @observable showDeletePermanentlyModal = false;
   @observable showTemplateModal = false;
   @observable showShareModal = false;
 
@@ -62,6 +64,10 @@ class DocumentMenu extends React.Component<Props> {
 
   handleDelete = (ev: SyntheticEvent<>) => {
     this.showDeleteModal = true;
+  };
+
+  handlePermanentlyDelete = async (ev: SyntheticEvent<>) => {
+    this.showDeletePermanentlyModal = true;
   };
 
   handleDocumentHistory = () => {
@@ -99,6 +105,9 @@ class DocumentMenu extends React.Component<Props> {
 
   handleCloseDeleteModal = () => {
     this.showDeleteModal = false;
+  };
+  handleCloseDeletePermanentlyModal = () => {
+    this.showDeletePermanentlyModal = false;
   };
 
   handleArchive = async (ev: SyntheticEvent<>) => {
@@ -304,6 +313,11 @@ class DocumentMenu extends React.Component<Props> {
                 visible: !!can.delete,
               },
               {
+                title: `${t("Delete permanently")}…`,
+                onClick: this.handlePermanentlyDelete,
+                visible: !can.delete && can.restore,
+              },
+              {
                 title: `${t("Move")}…`,
                 onClick: this.handleMove,
                 visible: !!can.move,
@@ -339,6 +353,18 @@ class DocumentMenu extends React.Component<Props> {
           <DocumentDelete
             document={this.props.document}
             onSubmit={this.handleCloseDeleteModal}
+          />
+        </Modal>
+        <Modal
+          title={t("Delete {{ documentName }} permanently", {
+            documentName: this.props.document.noun,
+          })}
+          onRequestClose={this.handleCloseDeletePermanentlyModal}
+          isOpen={this.showDeletePermanentlyModal}
+        >
+          <DocumentDeletePermanently
+            document={this.props.document}
+            onSubmit={this.handleCloseDeletePermanentlyModal}
           />
         </Modal>
         <Modal

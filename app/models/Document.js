@@ -146,6 +146,10 @@ export default class Document extends BaseModel {
     set(this, data);
   };
 
+  permanentlyDelete = () => {
+    return this.store.permanentlyDelete(this);
+  };
+
   archive = () => {
     return this.store.archive(this);
   };
