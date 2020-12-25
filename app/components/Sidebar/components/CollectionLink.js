@@ -12,6 +12,7 @@ import EditableTitle from "./EditableTitle";
 import SidebarLink from "./SidebarLink";
 import useStores from "hooks/useStores";
 import CollectionMenu from "menus/CollectionMenu";
+import type { NavigationNode } from "types";
 
 type Props = {|
   collection: Collection,
@@ -39,6 +40,20 @@ function CollectionLink({
 
   const { documents, policies } = useStores();
   const expanded = collection.id === ui.activeCollectionId;
+
+  const collectionDocsSet = new Set(
+    documents.inCollection(collection.id).map((doc) => doc.id)
+  );
+  const getNodesInCollection = (nodes: NavigationNode[]) => {
+    return nodes
+      .filter((node) => collectionDocsSet.has(node.id))
+      .map((node) => ({
+        ...node,
+        children: getNodesInCollection(node.children),
+      }));
+  };
+
+  const visibleNodes = getNodesInCollection(collection.documents);
 
   // Droppable
   const [{ isOver, canDrop }, drop] = useDrop({
@@ -91,7 +106,7 @@ function CollectionLink({
       </div>
 
       {expanded &&
-        collection.documents.map((node) => (
+        visibleNodes.map((node) => (
           <DocumentLink
             key={node.id}
             node={node}
