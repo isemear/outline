@@ -1126,7 +1126,6 @@ router.post("documents.permanentlyDelete", auth(), async (ctx) => {
   const teamId = document.teamId;
   const title = document.title;
 
-  console.log("DELETING");
   await document.permanentlyDelete();
 
   await Event.create({
