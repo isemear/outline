@@ -5,7 +5,7 @@ on:
     branches: main
 
 env:
-  CURRENT_DOCKER_IMAGE: ${{ secrets.DOCKER_REPO }}/${{ secrets.DOCKER_IMAGE }}:${GITHUB_SHA::8}
+  CURRENT_DOCKER_IMAGE: ${{ secrets.DOCKER_REPO }}/${{ secrets.DOCKER_IMAGE }}:${{ env.GITHUB_SHA::8 }}
 
 jobs:
   main:
